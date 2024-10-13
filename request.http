@@ -1,0 +1,34 @@
+GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e
+
+### Get a person photo
+
+GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
+
+
+
+### Create a user avatar
+
+PUT http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="photo"; filename="sigrid.png'
+
+< C:\Users\Damian\Pictures\Camera Roll\calvian.png
+
+--boundary--
+
+###
+DELETE http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
+
+### Update a user avatar
+
+PATCH http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="photo"; filename="sigrid.png'
+
+< C:\Users\Damian\Pictures\Camera Roll\eloise.png
+
+--boundary--
