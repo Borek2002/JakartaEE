@@ -1,10 +1,12 @@
 package pl.edu.pg.eti.kask.user.mapper;
 
+import jakarta.enterprise.context.Dependent;
 import pl.edu.pg.eti.kask.user.dto.GetUserResponse;
-import pl.edu.pg.eti.kask.user.entity.User;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 
 import java.util.function.Function;
 
+@Dependent
 public class UserToResponseFunction implements Function<User, GetUserResponse> {
     @Override
     public GetUserResponse apply(User user) {

@@ -1,33 +1,42 @@
 package pl.edu.pg.eti.kask.configuration.listener;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.control.RequestContextController;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
-import pl.edu.pg.eti.kask.user.entity.User;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 import pl.edu.pg.eti.kask.user.service.api.UserService;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.UUID;
 
-@WebListener
-public class InitializedData implements ServletContextListener {
 
-    private UserService userService;
+@ApplicationScoped
+public class InitializedData {
 
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        userService = (UserService) event.getServletContext().getAttribute("userService");
-        init();
+    private final UserService userService;
+    private final RequestContextController requestContextController;
+
+    @Inject
+    public InitializedData(UserService userService, RequestContextController requestContextController) {
+        this.userService = userService;
+        this.requestContextController = requestContextController;
     }
+
+
 
     @SneakyThrows
     private void init() {
+        requestContextController.activate();
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .firstName("System")
                 .lastName("Admin")
                 .email("admin@simplerpg.example.com")
+                .reservations(new ArrayList<>())
                 .build();
 
         User kevin = User.builder()
@@ -35,6 +44,7 @@ public class InitializedData implements ServletContextListener {
                 .firstName("Kevin")
                 .lastName("Pear")
                 .email("kevin@example.com")
+                .reservations(new ArrayList<>())
                 .build();
 
         User alice = User.builder()
@@ -42,6 +52,7 @@ public class InitializedData implements ServletContextListener {
                 .firstName("Alice")
                 .lastName("Grape")
                 .email("alice@example.com")
+                .reservations(new ArrayList<>())
                 .build();
 
         User jakub = User.builder()
@@ -49,13 +60,21 @@ public class InitializedData implements ServletContextListener {
                 .firstName("Jakub")
                 .lastName("Jacob")
                 .email("jakub@example.com")
+                .reservations(new ArrayList<>())
                 .build();
 
         userService.create(admin);
         userService.create(kevin);
         userService.create(alice);
         userService.create(jakub);
+
+        requestContextController.deactivate();
     }
+
+    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
+        init();
+    }
+
 
     @SneakyThrows
     private byte[] getResourceAsByteArray(String name) {

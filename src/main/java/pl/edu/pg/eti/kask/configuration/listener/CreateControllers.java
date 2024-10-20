@@ -8,7 +8,7 @@ import pl.edu.pg.eti.kask.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.user.controller.impl.UserDefaultController;
 import pl.edu.pg.eti.kask.user.service.api.UserService;
 
-@WebListener
+
 public class CreateControllers implements ServletContextListener {
 
     @Override

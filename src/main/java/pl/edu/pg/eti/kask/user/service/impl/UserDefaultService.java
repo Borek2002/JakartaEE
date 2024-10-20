@@ -1,6 +1,9 @@
 package pl.edu.pg.eti.kask.user.service.impl;
 
-import pl.edu.pg.eti.kask.user.entity.User;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 import pl.edu.pg.eti.kask.user.repository.api.UserRepository;
 import pl.edu.pg.eti.kask.user.service.api.UserService;
 
@@ -13,14 +16,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class UserDefaultService implements UserService {
 
     private final UserRepository repository;
     private final Path photoDirectory;
 
-    public UserDefaultService(UserRepository repository, Path photoDirectory) {
+
+    @Inject
+    public UserDefaultService(UserRepository repository) {
         this.repository = repository;
-        this.photoDirectory = photoDirectory;
+        this.photoDirectory = Path.of("C:\\Users\\Damian\\Pictures\\TEMP");
     }
 
     @Override

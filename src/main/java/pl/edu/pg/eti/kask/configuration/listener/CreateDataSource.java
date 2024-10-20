@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.WebListener;
 import pl.edu.pg.eti.kask.datastore.component.DataStore;
 import pl.edu.pg.eti.kask.serialization.component.CloningUtility;
 
-@WebListener
+
 public class CreateDataSource implements ServletContextListener {
 
     @Override

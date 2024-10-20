@@ -1,6 +1,6 @@
 package pl.edu.pg.eti.kask.user.service.api;
 
-import pl.edu.pg.eti.kask.user.entity.User;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 
 import java.io.InputStream;
 import java.nio.file.Path;

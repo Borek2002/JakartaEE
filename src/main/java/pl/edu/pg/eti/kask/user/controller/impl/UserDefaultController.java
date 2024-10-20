@@ -1,12 +1,14 @@
 package pl.edu.pg.eti.kask.user.controller.impl;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.component.DtoMapperFactory;
 import pl.edu.pg.eti.kask.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.controller.servlet.exception.NotFoundException;
 import pl.edu.pg.eti.kask.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.user.dto.GetUsersResponse;
-import pl.edu.pg.eti.kask.user.entity.User;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 import pl.edu.pg.eti.kask.user.service.api.UserService;
 
 import java.io.InputStream;
@@ -14,12 +16,14 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.UUID;
 
+@RequestScoped
 public class UserDefaultController implements UserController {
 
     private final UserService userService;
 
     private final DtoMapperFactory mapperFactory;
 
+    @Inject
     public UserDefaultController(UserService userService, DtoMapperFactory mapperFactory) {
         this.userService = userService;
         this.mapperFactory = mapperFactory;

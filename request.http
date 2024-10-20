@@ -1,9 +1,22 @@
+###Get persons
+
+GET http://localhost:9080/hotels/api/users
+
+### Get person
+
 GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e
+
+### Get non person
+
+GET http://localhost:9080/hotels/api/users/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0
 
 ### Get a person photo
 
 GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
 
+### Get a non person photo
+
+GET http://localhost:9080/hotels/api/users/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0/photo
 
 
 ### Create a user avatar
@@ -14,12 +27,17 @@ Content-Type: multipart/form-data; boundary=boundary
 --boundary
 Content-Disposition: form-data; name="photo"; filename="sigrid.png'
 
-< C:\Users\Damian\Pictures\Camera Roll\calvian.png
+< /home/student/188782/eloise.png
 
 --boundary--
 
-###
+### Delete avatar
+
 DELETE http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/photo
+
+### Delete non user avatar
+
+DELETE http://localhost:9080/hotels/api/users/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0/photo
 
 ### Update a user avatar
 
@@ -29,6 +47,75 @@ Content-Type: multipart/form-data; boundary=boundary
 --boundary
 Content-Disposition: form-data; name="photo"; filename="sigrid.png'
 
-< C:\Users\Damian\Pictures\Camera Roll\eloise.png
+< /home/student/188782/calvian.png
 
 --boundary--
+
+### Get hotels
+
+GET http://localhost:9080/hotels/api/hotels
+
+### Get non hotel
+
+GET http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+
+### Put hotel
+
+PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+Content-Type: application/json
+
+{
+  "name": "Radison",
+  "city": "Gdansk",
+  "rooms": 1
+}
+
+### Update hotel
+
+PATCH http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+Content-Type: application/json
+
+{
+"name": "Radisson",
+"rooms": 2
+}
+
+### Delete hotel
+
+DELETE http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+
+### Get reservations
+
+GET http://localhost:9080/hotels/api/reservations
+
+### Get non reservation
+
+GET http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+
+### Put reservation
+
+PUT http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+Content-Type: application/json
+
+{
+  "startTime": "2024-05-02",
+  "endTime": null,
+  "status": "RESERVED",
+  "hotelId": "42d32cd8-08c7-46f4-ad80-034c1c83faee",
+  "userId": "81e1c2a9-7f57-439b-b53d-6db88b071e4e"
+}
+
+### Update hotel
+
+PATCH http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+Content-Type: application/json
+
+{
+  "endTime": "2024-06-01",
+  "status": "CANCELLED"
+}
+
+### Delete reservation
+
+DELETE http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+

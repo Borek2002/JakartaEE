@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.controller.servlet;
 
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
@@ -8,6 +9,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import pl.edu.pg.eti.kask.hotel.controller.api.HotelController;
+import pl.edu.pg.eti.kask.hotel.dto.PatchHotelRequest;
+import pl.edu.pg.eti.kask.hotel.dto.PutHotelRequest;
+import pl.edu.pg.eti.kask.reservation.controller.api.ReservationController;
+import pl.edu.pg.eti.kask.reservation.dto.PatchReservationRequest;
+import pl.edu.pg.eti.kask.reservation.dto.PutReservationRequest;
 import pl.edu.pg.eti.kask.user.controller.api.UserController;
 
 import java.io.IOException;
@@ -21,7 +28,11 @@ import java.util.regex.Pattern;
 @MultipartConfig(maxFileSize = 200 * 1024)
 public class ApiServlet extends HttpServlet {
 
-    private UserController userController;
+    private final UserController userController;
+
+    private final HotelController hotelController;
+
+    private final ReservationController reservationController;
 
     public static final class Paths {
 
@@ -37,11 +48,27 @@ public class ApiServlet extends HttpServlet {
 
         public static final Pattern USER = Pattern.compile("/users/(%s)".formatted(UUID.pattern()));
 
+        public static final Pattern HOTELS = Pattern.compile("/hotels/?");
+
+        public static final Pattern HOTEL = Pattern.compile("/hotels/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern RESERVATIONS = Pattern.compile("/reservations/?");
+
+        public static final Pattern RESERVATION = Pattern.compile("/reservations/(%s)".formatted(UUID.pattern()));
+
+
         public static final Pattern USER_PHOTO = Pattern.compile("/users/(%s)/photo".formatted(UUID.pattern()));
 
     }
 
     private final Jsonb jsonb = JsonbBuilder.create();
+
+    @Inject
+    public ApiServlet(UserController userController, HotelController hotelController, ReservationController reservationController) {
+        this.userController = userController;
+        this.hotelController = hotelController;
+        this.reservationController = reservationController;
+    }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,12 +77,6 @@ public class ApiServlet extends HttpServlet {
         } else {
             super.service(request, response);
         }
-    }
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        userController = (UserController) getServletContext().getAttribute("userController");
     }
 
     @Override
@@ -79,6 +100,24 @@ public class ApiServlet extends HttpServlet {
                 response.setContentLength(portrait.length);
                 response.getOutputStream().write(portrait);
                 return;
+            } else if (path.matches(Patterns.HOTELS.pattern())) {
+                response.setContentType("application/json");
+                response.getWriter().write(jsonb.toJson(hotelController.getHotels()));
+                return;
+            } else if (path.matches(Patterns.HOTEL.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.HOTEL, path);
+                response.getWriter().write(jsonb.toJson(hotelController.getHotel(uuid)));
+                return;
+            } else if (path.matches(Patterns.RESERVATIONS.pattern())) {
+                response.setContentType("application/json");
+                response.getWriter().write(jsonb.toJson(reservationController.getReservations()));
+                return;
+            } else if (path.matches(Patterns.RESERVATION.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.RESERVATION, path);
+                response.getWriter().write(jsonb.toJson(reservationController.getReservation(uuid)));
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -93,6 +132,16 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.USER_PHOTO, path);
                 userController.createAvatar(uuid, request.getPart("photo").getInputStream());
                 return;
+            } else if (path.matches(Patterns.HOTEL.pattern())) {
+                UUID uuid = extractUuid(Patterns.HOTEL, path);
+                hotelController.putHotel(uuid, jsonb.fromJson(request.getReader(), PutHotelRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "hotels", uuid.toString()));
+                return;
+            } else if (path.matches(Patterns.RESERVATION.pattern())) {
+                UUID uuid = extractUuid(Patterns.RESERVATION, path);
+                reservationController.putReservation(uuid, jsonb.fromJson(request.getReader(), PutReservationRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "reservations", uuid.toString()));
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -105,6 +154,14 @@ public class ApiServlet extends HttpServlet {
             if (path.matches(Patterns.USER_PHOTO.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER_PHOTO, path);
                 userController.updateAvatar(uuid, request.getPart("photo").getInputStream());
+                return;
+            } else if (path.matches(Patterns.HOTEL.pattern())) {
+                UUID uuid = extractUuid(Patterns.HOTEL, path);
+                hotelController.patchHotel(uuid, jsonb.fromJson(request.getReader(), PatchHotelRequest.class));
+                return;
+            } else if (path.matches(Patterns.RESERVATION.pattern())) {
+                UUID uuid = extractUuid(Patterns.RESERVATION, path);
+                reservationController.patchReservation(uuid, jsonb.fromJson(request.getReader(), PatchReservationRequest.class));
                 return;
             }
         }
@@ -120,6 +177,14 @@ public class ApiServlet extends HttpServlet {
             if (path.matches(Patterns.USER_PHOTO.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER_PHOTO, path);
                 userController.removeAvatar(uuid);
+                return;
+            } else if (path.matches(Patterns.HOTEL.pattern())) {
+                UUID uuid = extractUuid(Patterns.HOTEL, path);
+                hotelController.deleteHotel(uuid);
+                return;
+            } else if (path.matches(Patterns.RESERVATION.pattern())) {
+                UUID uuid = extractUuid(Patterns.RESERVATION, path);
+                reservationController.deleteReservation(uuid);
                 return;
             }
         }
