@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{reservationCreate.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Create reservation - basic information</h2></header>
+            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:inputText id="startTime" value="#{reservationCreate.reservation.startTime}" styleClass="form-control" converter="localDateConverter">
+                            </h:inputText>
+                            <h:outputLabel for="startTime" value="startTime:" styleClass="form-label"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:inputText id="end" value="#{reservationCreate.reservation.endTime}" styleClass="form-control" converter="localDateConverter">
+                            </h:inputText>
+                            <h:outputLabel for="end" value="endTime:" styleClass="form-label"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <fieldset id="11">
+                            <legend class="form-label fs-6">Statuses:</legend>
+                            <ui:repeat value="#{reservationCreate.statuses}" var="status">
+                                <div class="form-check">
+                                    <h:selectOneRadio id="radioId" group="status"
+                                                      value="#{reservationCreate.reservation.status}"
+                                                      styleClass="form-check-input"
+                                                      enabledClass="form-check-label">
+                                        <f:selectItem itemValue="#{status}" itemLabel="#{status.name()}"/>
+                                    </h:selectOneRadio>
+                                </div>
+                            </ui:repeat>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <fieldset id="22">
+                            <legend class="form-label fs-6">Hotels:</legend>
+                            <!-- Instead of ui:repeat the h:selectOneRadio with f:selectItems can be used but then
+                            Faces renders table or list and custom styling with CSS libraties can be troublesome. -->
+                            <ui:repeat value="#{reservationCreate.hotels}" var="hotel">
+                                <div class="form-check">
+                                    <h:selectOneRadio id="radioId2" group="hotels"
+                                                      value="#{reservationCreate.reservation.hotel}"
+                                                      styleClass="form-check-input"
+                                                      enabledClass="form-check-label">
+                                        <f:selectItem itemValue="#{hotel}" itemLabel="#{hotel.name}"/>
+                                    </h:selectOneRadio>
+                                </div>
+                            </ui:repeat>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-primary" value="Create" action="#{reservationCreate.saveActionn}"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-secondary" value="Cancel"
+                                         action="#{reservationCreate.cancelAction()}"/>
+                    </div>
+                </div>
+            </h:form>
+        </article>
+    </ui:define>
+
+</ui:composition>

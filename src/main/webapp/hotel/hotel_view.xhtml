@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{hotelView.id}" required="true"/>
+        <f:viewAction action="#{hotelView.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2><h:outputText value="#{hotelView.hotel.name}"/></h2></header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Rooms
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{hotelView.hotel.rooms}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                City
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{hotelView.hotel.city}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h:dataTable value="#{hotelView.hotel.reservationList}" var="reservation"
+                             styleClass="table align-middle mb-0 bg-white" headerClass="bg-light">
+                    <h:column>
+                        <f:facet name="header">Id</f:facet>
+                        <h:outputText value="#{reservation.id}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">View</f:facet>
+                        <h:link outcome="/reservation/reservation_view.xhtml" value="View">
+                            <f:param name="id" value="#{reservation.id}"/>
+                        </h:link>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Edit</f:facet>
+                        <h:link outcome="/reservation/reservation_edit.xhtml" value="View">
+                            <f:param name="id" value="#{reservation.id}"/>
+                        </h:link>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:form>
+                            <h:commandButton styleClass="btn" value="Delete"
+                                             action="#{hotelView.delete(reservation)}"/>
+                        </h:form>
+                    </h:column>
+
+                    <f:facet name="footer">
+                        <h:button styleClass="btn" outcome="/reservation/reservation_create.xhtml"
+                                  value="Create new reservation"/>
+                    </f:facet>
+                </h:dataTable>
+            </div>
+        </article>
+    </ui:define>
+
+</ui:composition>
