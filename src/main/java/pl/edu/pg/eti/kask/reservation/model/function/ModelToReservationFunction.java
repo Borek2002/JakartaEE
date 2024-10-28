@@ -16,7 +16,7 @@ public class ModelToReservationFunction implements Function<ReservationCreateMod
                 .startTime(reservationCreateModel.getStartTime())
                 .endTime(reservationCreateModel.getEndTime())
                 .hotel(Hotel.builder()
-                        .id(reservationCreateModel.getHotel().getId())
+                        .id(reservationCreateModel.getHotel())
                         .build())
                 .build();
     }

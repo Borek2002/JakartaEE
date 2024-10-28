@@ -46,11 +46,15 @@ public class ReservationDefaultService implements ReservationService {
                     h.getReservations().add(reservation);
                     this.hotelRepository.update(h);
                 }, ()->{throw new NotFoundException();});
-        this.userRepository.find(reservation.getUser().getId())
-                .ifPresentOrElse(h ->{
-                    h.getReservations().add(reservation);
-                    this.userRepository.update(h);
-                }, ()->{throw new NotFoundException();});
+        if(reservation.getUser()!=null) {
+            this.userRepository.find(reservation.getUser().getId())
+                    .ifPresentOrElse(h -> {
+                        h.getReservations().add(reservation);
+                        this.userRepository.update(h);
+                    }, () -> {
+                        throw new NotFoundException();
+                    });
+        }
         this.repository.create(reservation);
     }
 
@@ -66,11 +70,15 @@ public class ReservationDefaultService implements ReservationService {
                     h.getReservations().remove(reservation);
                     this.hotelRepository.update(h);
                 }, ()->{throw new NotFoundException();});
-        this.userRepository.find(reservation.getUser().getId())
-                .ifPresentOrElse(h ->{
-                    h.getReservations().remove(reservation);
-                    this.userRepository.update(h);
-                }, ()->{throw new NotFoundException();});
+        if(reservation.getUser()!=null) {
+            this.userRepository.find(reservation.getUser().getId())
+                    .ifPresentOrElse(h -> {
+                        h.getReservations().remove(reservation);
+                        this.userRepository.update(h);
+                    }, () -> {
+                        throw new NotFoundException();
+                    });
+        }
         this.repository.delete(reservation);
     }
 }

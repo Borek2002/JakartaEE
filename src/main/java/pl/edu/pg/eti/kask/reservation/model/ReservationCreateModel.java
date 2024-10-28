@@ -20,5 +20,5 @@ public class ReservationCreateModel {
     private LocalDate startTime;
     private LocalDate endTime;
     private Reservation.ReservationStatus status;
-    private HotelModelSmall hotel;
+    private UUID hotel;
 }
