@@ -94,14 +94,13 @@ GET http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7
 
 ### Put reservation
 
-PUT http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
 Content-Type: application/json
 
 {
   "startTime": "2024-05-02",
   "endTime": null,
   "status": "RESERVED",
-  "hotelId": "42d32cd8-08c7-46f4-ad80-034c1c83faee",
   "userId": "81e1c2a9-7f57-439b-b53d-6db88b071e4e"
 }
 

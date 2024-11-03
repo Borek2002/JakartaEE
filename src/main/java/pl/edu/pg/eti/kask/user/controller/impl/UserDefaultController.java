@@ -2,9 +2,9 @@ package pl.edu.pg.eti.kask.user.controller.impl;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.BadRequestException;
 import pl.edu.pg.eti.kask.component.DtoMapperFactory;
-import pl.edu.pg.eti.kask.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.controller.servlet.exception.NotFoundException;
 import pl.edu.pg.eti.kask.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.user.dto.GetUsersResponse;

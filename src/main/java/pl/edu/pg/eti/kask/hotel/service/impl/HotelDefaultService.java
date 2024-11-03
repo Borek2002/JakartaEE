@@ -48,10 +48,7 @@ public class HotelDefaultService implements HotelService {
     @Override
     public void delete(Hotel hotel) {
         hotel.getReservations().forEach(r -> this.reservationRepository.find(r.getId())
-                .ifPresent(reservation -> {
-                    reservation.setHotel(null);
-                    this.reservationRepository.update(reservation);
-                }));
+                .ifPresent(this.reservationRepository::delete));
 
         this.repository.delete(hotel);
     }

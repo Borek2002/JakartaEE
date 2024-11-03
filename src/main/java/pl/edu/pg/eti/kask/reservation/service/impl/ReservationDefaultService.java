@@ -3,7 +3,7 @@ package pl.edu.pg.eti.kask.reservation.service.impl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-import pl.edu.pg.eti.kask.controller.servlet.exception.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.reservation.repository.api.ReservationRepository;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;

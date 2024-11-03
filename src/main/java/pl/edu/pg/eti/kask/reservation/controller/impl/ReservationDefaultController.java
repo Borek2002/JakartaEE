@@ -2,9 +2,18 @@ package pl.edu.pg.eti.kask.reservation.controller.impl;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.UriInfo;
 import pl.edu.pg.eti.kask.component.DtoMapperFactory;
-import pl.edu.pg.eti.kask.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.controller.servlet.exception.NotFoundException;
+
+
+import pl.edu.pg.eti.kask.hotel.controller.api.HotelController;
 import pl.edu.pg.eti.kask.reservation.controller.api.ReservationController;
 import pl.edu.pg.eti.kask.reservation.dto.GetReservationResponse;
 import pl.edu.pg.eti.kask.reservation.dto.GetReservationsResponse;
@@ -14,17 +23,26 @@ import pl.edu.pg.eti.kask.reservation.service.api.ReservationService;
 
 import java.util.UUID;
 
-@RequestScoped
+@Path("")
 public class ReservationDefaultController implements ReservationController {
 
     private final ReservationService service;
 
     private final DtoMapperFactory mapperFactory;
+    private final UriInfo uriInfo;
+    private HttpServletResponse response;
+
+    @Context
+    public void setResponse(HttpServletResponse response) {
+        //ATM in this implementation only HttpServletRequest can be injected with CDI so JAX-RS injection is used.
+        this.response = response;
+    }
 
     @Inject
-    public ReservationDefaultController(ReservationService service, DtoMapperFactory mapperFactory) {
+    public ReservationDefaultController(ReservationService service, DtoMapperFactory mapperFactory, UriInfo uriInfo) {
         this.service = service;
         this.mapperFactory = mapperFactory;
+        this.uriInfo = uriInfo;
     }
 
     @Override
@@ -39,9 +57,18 @@ public class ReservationDefaultController implements ReservationController {
     }
 
     @Override
-    public void putReservation(UUID id, PutReservationRequest request) {
+    public void putReservation(UUID hotelId, UUID id, PutReservationRequest request) {
         try {
+            request.setHotelId(hotelId);
             this.service.create(this.mapperFactory.requestToReservation().apply(id, request));
+            response.setHeader("Location", uriInfo.getBaseUriBuilder()
+                    .path(ReservationController.class, "getReservation")
+                    .build(id)
+                    .toString());
+            //This can be done with Response builder but requires method different return type.
+            //Calling HttpServletResponse#setStatus(int) is ignored.
+            //Calling HttpServletResponse#sendError(int) causes response headers and body looking like error.
+            throw new WebApplicationException(Response.Status.CREATED);
         } catch (IllegalArgumentException ex){
             throw new BadRequestException(ex);
         }
