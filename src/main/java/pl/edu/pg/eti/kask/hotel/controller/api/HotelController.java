@@ -27,7 +27,7 @@ public interface HotelController {
     @Consumes(MediaType.APPLICATION_JSON)
     void putHotel(@PathParam("id") UUID id, PutHotelRequest request);
 
-    @DELETE
+    @PATCH
     @Path("/hotels/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     void patchHotel(@PathParam("id") UUID id, PatchHotelRequest request);

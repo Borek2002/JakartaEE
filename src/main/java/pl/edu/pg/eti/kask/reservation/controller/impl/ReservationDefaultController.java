@@ -3,6 +3,7 @@ package pl.edu.pg.eti.kask.reservation.controller.impl;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
@@ -10,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.UriInfo;
+import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import pl.edu.pg.eti.kask.component.DtoMapperFactory;
 
 
@@ -22,8 +25,10 @@ import pl.edu.pg.eti.kask.reservation.dto.PutReservationRequest;
 import pl.edu.pg.eti.kask.reservation.service.api.ReservationService;
 
 import java.util.UUID;
+import java.util.logging.Level;
 
 @Path("")
+@Log
 public class ReservationDefaultController implements ReservationController {
 
     private final ReservationService service;
@@ -57,6 +62,7 @@ public class ReservationDefaultController implements ReservationController {
     }
 
     @Override
+    @SneakyThrows
     public void putReservation(UUID hotelId, UUID id, PutReservationRequest request) {
         try {
             request.setHotelId(hotelId);
@@ -69,8 +75,15 @@ public class ReservationDefaultController implements ReservationController {
             //Calling HttpServletResponse#setStatus(int) is ignored.
             //Calling HttpServletResponse#sendError(int) causes response headers and body looking like error.
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (IllegalArgumentException ex){
-            throw new BadRequestException(ex);
+        } catch (NotFoundException ex) {
+            throw new NotFoundException(ex);
+        }
+        catch (TransactionalException ex) {
+            if (ex.getCause() instanceof IllegalArgumentException) {
+                log.log(Level.WARNING, ex.getMessage(), ex);
+                throw new BadRequestException(ex);
+            }
+            throw ex;
         }
     }
 

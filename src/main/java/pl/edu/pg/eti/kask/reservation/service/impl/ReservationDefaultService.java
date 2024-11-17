@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.reservation.service.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import jakarta.ws.rs.NotFoundException;
 import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
@@ -40,45 +41,23 @@ public class ReservationDefaultService implements ReservationService {
     }
 
     @Override
+    @Transactional
     public void create(Reservation reservation) {
-        this.hotelRepository.find(reservation.getHotel().getId())
-                .ifPresentOrElse(h ->{
-                    h.getReservations().add(reservation);
-                    this.hotelRepository.update(h);
-                }, ()->{throw new NotFoundException();});
-        if(reservation.getUser()!=null) {
-            this.userRepository.find(reservation.getUser().getId())
-                    .ifPresentOrElse(h -> {
-                        h.getReservations().add(reservation);
-                        this.userRepository.update(h);
-                    }, () -> {
-                        throw new NotFoundException();
-                    });
+        if (hotelRepository.find(reservation.getHotel().getId()).isEmpty()) {
+            throw new NotFoundException("Nie ma hotelu");
         }
         this.repository.create(reservation);
     }
 
     @Override
+    @Transactional
     public void update(Reservation reservation) {
         this.repository.update(reservation);
     }
 
     @Override
+    @Transactional
     public void delete(Reservation reservation) {
-        this.hotelRepository.find(reservation.getHotel().getId())
-                .ifPresentOrElse(h ->{
-                    h.getReservations().remove(reservation);
-                    this.hotelRepository.update(h);
-                }, ()->{throw new NotFoundException();});
-        if(reservation.getUser()!=null) {
-            this.userRepository.find(reservation.getUser().getId())
-                    .ifPresentOrElse(h -> {
-                        h.getReservations().remove(reservation);
-                        this.userRepository.update(h);
-                    }, () -> {
-                        throw new NotFoundException();
-                    });
-        }
         this.repository.delete(reservation);
     }
 }

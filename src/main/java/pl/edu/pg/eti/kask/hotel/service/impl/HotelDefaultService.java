@@ -2,7 +2,9 @@ package pl.edu.pg.eti.kask.hotel.service.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.hotel.service.api.HotelService;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @ApplicationScoped
 @NoArgsConstructor(force = true)
+@Log
 public class HotelDefaultService implements HotelService {
 
     private final HotelRepository repository;
@@ -36,20 +39,20 @@ public class HotelDefaultService implements HotelService {
     }
 
     @Override
+    @Transactional
     public void create(Hotel hotel) {
         this.repository.create(hotel);
     }
 
     @Override
+    @Transactional
     public void update(Hotel hotel) {
         this.repository.update(hotel);
     }
 
     @Override
+    @Transactional
     public void delete(Hotel hotel) {
-        hotel.getReservations().forEach(r -> this.reservationRepository.find(r.getId())
-                .ifPresent(this.reservationRepository::delete));
-
         this.repository.delete(hotel);
     }
 }

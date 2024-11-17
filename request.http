@@ -104,7 +104,7 @@ Content-Type: application/json
   "userId": "81e1c2a9-7f57-439b-b53d-6db88b071e4e"
 }
 
-### Update hotel
+### Update reservation
 
 PATCH http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
 Content-Type: application/json

@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.user.service.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.user.repository.entity.User;
 import pl.edu.pg.eti.kask.user.repository.api.UserRepository;
@@ -41,6 +42,7 @@ public class UserDefaultService implements UserService {
     }
 
     @Override
+    @Transactional
     public void create(User user) {
         this.repository.create(user);
     }
@@ -55,6 +57,7 @@ public class UserDefaultService implements UserService {
     }
 
     @Override
+    @Transactional
     public void createAvatar(User user, InputStream is) {
         try {
             Files.createDirectories(photoDirectory);
@@ -68,6 +71,7 @@ public class UserDefaultService implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateAvatar(User user, InputStream is) {
         try {
             Path photoPath = photoDirectory.resolve(user.getId().toString() + ".png");
@@ -80,6 +84,7 @@ public class UserDefaultService implements UserService {
     }
 
     @Override
+    @Transactional
     public void removeAvatar(User user) {
         try {
             Files.delete(Path.of(user.getPhoto()));
