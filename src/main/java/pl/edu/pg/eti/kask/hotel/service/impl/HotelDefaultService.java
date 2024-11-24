@@ -1,7 +1,11 @@
 package pl.edu.pg.eti.kask.hotel.service.impl;
 
+import jakarta.ejb.EJBAccessException;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -9,23 +13,25 @@ import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.hotel.service.api.HotelService;
 import pl.edu.pg.eti.kask.reservation.repository.api.ReservationRepository;
+import pl.edu.pg.eti.kask.user.repository.entity.UserRoles;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 @Log
 public class HotelDefaultService implements HotelService {
 
     private final HotelRepository repository;
-    private final ReservationRepository reservationRepository;
+    private final SecurityContext securityContext;
 
     @Inject
-    public HotelDefaultService(HotelRepository repository, ReservationRepository reservationRepository) {
+    public HotelDefaultService(HotelRepository repository, SecurityContext securityContext) {
         this.repository = repository;
-        this.reservationRepository = reservationRepository;
+        this.securityContext = securityContext;
     }
 
     @Override
@@ -39,20 +45,18 @@ public class HotelDefaultService implements HotelService {
     }
 
     @Override
-    @Transactional
     public void create(Hotel hotel) {
         this.repository.create(hotel);
     }
 
     @Override
-    @Transactional
     public void update(Hotel hotel) {
         this.repository.update(hotel);
     }
 
     @Override
-    @Transactional
     public void delete(Hotel hotel) {
         this.repository.delete(hotel);
     }
+
 }

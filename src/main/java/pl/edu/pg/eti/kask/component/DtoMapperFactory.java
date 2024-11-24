@@ -9,6 +9,7 @@ import pl.edu.pg.eti.kask.reservation.mapper.RequestToReservationFunction;
 import pl.edu.pg.eti.kask.reservation.mapper.ReservationToResponseFunction;
 import pl.edu.pg.eti.kask.reservation.mapper.ReservationsToResponseFunction;
 import pl.edu.pg.eti.kask.reservation.mapper.UpdateToReservationFunction;
+import pl.edu.pg.eti.kask.user.mapper.RequestToUserFunction;
 import pl.edu.pg.eti.kask.user.mapper.UserToResponseFunction;
 import pl.edu.pg.eti.kask.user.mapper.UsersToResponseFunction;
 
@@ -18,6 +19,8 @@ public class DtoMapperFactory {
     public UserToResponseFunction userToResponse(){return new UserToResponseFunction();}
 
     public UsersToResponseFunction usersToResponse(){return new UsersToResponseFunction();}
+
+    public RequestToUserFunction requestToUserFunction(){return new RequestToUserFunction();}
 
     public HotelsToResponseFunction hotelsToResponse(){return new HotelsToResponseFunction();}
 

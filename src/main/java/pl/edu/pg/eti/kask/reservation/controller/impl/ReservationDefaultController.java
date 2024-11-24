@@ -1,15 +1,16 @@
 package pl.edu.pg.eti.kask.reservation.controller.impl;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBAccessException;
+import jakarta.ejb.EJBException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.TransactionalException;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -23,15 +24,17 @@ import pl.edu.pg.eti.kask.reservation.dto.GetReservationsResponse;
 import pl.edu.pg.eti.kask.reservation.dto.PatchReservationRequest;
 import pl.edu.pg.eti.kask.reservation.dto.PutReservationRequest;
 import pl.edu.pg.eti.kask.reservation.service.api.ReservationService;
+import pl.edu.pg.eti.kask.user.repository.entity.UserRoles;
 
 import java.util.UUID;
 import java.util.logging.Level;
 
 @Path("")
 @Log
+@RolesAllowed(UserRoles.USER)
 public class ReservationDefaultController implements ReservationController {
 
-    private final ReservationService service;
+    private ReservationService service;
 
     private final DtoMapperFactory mapperFactory;
     private final UriInfo uriInfo;
@@ -44,10 +47,14 @@ public class ReservationDefaultController implements ReservationController {
     }
 
     @Inject
-    public ReservationDefaultController(ReservationService service, DtoMapperFactory mapperFactory, UriInfo uriInfo) {
-        this.service = service;
+    public ReservationDefaultController(DtoMapperFactory mapperFactory, UriInfo uriInfo) {
         this.mapperFactory = mapperFactory;
         this.uriInfo = uriInfo;
+    }
+
+    @EJB
+    public void setService(ReservationService service) {
+        this.service = service;
     }
 
     @Override
@@ -66,19 +73,16 @@ public class ReservationDefaultController implements ReservationController {
     public void putReservation(UUID hotelId, UUID id, PutReservationRequest request) {
         try {
             request.setHotelId(hotelId);
-            this.service.create(this.mapperFactory.requestToReservation().apply(id, request));
+            this.service.createForCallerPrincipal(this.mapperFactory.requestToReservation().apply(id, request));
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(ReservationController.class, "getReservation")
                     .build(id)
                     .toString());
-            //This can be done with Response builder but requires method different return type.
-            //Calling HttpServletResponse#setStatus(int) is ignored.
-            //Calling HttpServletResponse#sendError(int) causes response headers and body looking like error.
             throw new WebApplicationException(Response.Status.CREATED);
         } catch (NotFoundException ex) {
             throw new NotFoundException(ex);
         }
-        catch (TransactionalException ex) {
+        catch (EJBException ex) {
             if (ex.getCause() instanceof IllegalArgumentException) {
                 log.log(Level.WARNING, ex.getMessage(), ex);
                 throw new BadRequestException(ex);
@@ -100,8 +104,15 @@ public class ReservationDefaultController implements ReservationController {
     @Override
     public void deleteReservation(UUID id) {
         this.service.getReservation(id).ifPresentOrElse(
-                r->this.service.delete(r),
-                ()->{
+                entity -> {
+                    try {
+                        service.delete(entity);
+                    } catch (EJBAccessException ex) {
+                        log.log(Level.WARNING, ex.getMessage(), ex);
+                        throw new ForbiddenException(ex.getMessage());
+                    }
+                },
+                () -> {
                     throw new NotFoundException();
                 }
         );

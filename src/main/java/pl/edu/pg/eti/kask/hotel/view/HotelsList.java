@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.hotel.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -13,14 +14,18 @@ import java.util.Objects;
 @Named
 public class HotelsList {
 
-    private final HotelService service;
+    private HotelService service;
     private final ModelFunctionFactory factory;
     private HotelsModel hotels;
 
     @Inject
-    public HotelsList(HotelService service, ModelFunctionFactory factory) {
-        this.service = service;
+    public HotelsList(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setHotelService(HotelService hotelService) {
+        this.service = hotelService;
     }
 
     public HotelsModel getHotels() {

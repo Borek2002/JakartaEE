@@ -6,6 +6,7 @@ import pl.edu.pg.eti.kask.hotel.dto.GetHotelResponse;
 import pl.edu.pg.eti.kask.hotel.dto.GetHotelsResponse;
 import pl.edu.pg.eti.kask.hotel.dto.PatchHotelRequest;
 import pl.edu.pg.eti.kask.hotel.dto.PutHotelRequest;
+import pl.edu.pg.eti.kask.reservation.dto.GetReservationsResponse;
 
 import java.util.UUID;
 
@@ -21,6 +22,12 @@ public interface HotelController {
     @Path("/hotels")
     @Produces(MediaType.APPLICATION_JSON)
     GetHotelsResponse getHotels();
+
+    @GET
+    @Path("/hotels/{id}/reservations")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetReservationsResponse getHotelsReservations(@PathParam("id") UUID id);
+
 
     @PUT
     @Path("/hotels/{id}")

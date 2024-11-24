@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.reservation.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.Conversation;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.faces.view.ViewScoped;
@@ -25,8 +26,8 @@ import java.util.stream.Collectors;
 @Named
 public class ReservationCreate implements Serializable {
 
-    private final ReservationService reservationService;
-    private final HotelService hotelService;
+    private ReservationService reservationService;
+    private HotelService hotelService;
     private final ModelFunctionFactory modelFunctionFactory;
     private final Conversation conversation;
 
@@ -39,11 +40,19 @@ public class ReservationCreate implements Serializable {
     @Getter
     private final List<Reservation.ReservationStatus> statuses = List.of(Reservation.ReservationStatus.values());
     @Inject
-    public ReservationCreate(ReservationService reservationService, HotelService hotelService, ModelFunctionFactory modelFunctionFactory, Conversation conversation) {
-        this.reservationService = reservationService;
-        this.hotelService = hotelService;
+    public ReservationCreate(ModelFunctionFactory modelFunctionFactory, Conversation conversation) {
         this.modelFunctionFactory = modelFunctionFactory;
         this.conversation = conversation;
+    }
+
+    @EJB
+    public void setHotelService(HotelService hotelService) {
+        this.hotelService = hotelService;
+    }
+
+    @EJB
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     public void init() {

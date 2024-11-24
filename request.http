@@ -4,7 +4,20 @@ GET http://localhost:9080/hotels/api/users
 
 ### Get person
 
-GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e
+GET http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4a
+
+### Put user
+// @no-cookie-jar
+PUT http://localhost:9080/hotels/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4d
+Content-Type: application/json
+
+{
+  "email": "test",
+  "firstName": "Ludwik",
+  "lastName": "asd",
+  "password": "asddd"
+}
+
 
 ### Get non person
 
@@ -54,14 +67,22 @@ Content-Disposition: form-data; name="photo"; filename="sigrid.png'
 ### Get hotels
 
 GET http://localhost:9080/hotels/api/hotels
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
 
 ### Get non hotel
 
-GET http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+GET http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+
+### Get non hotel reservations
+
+GET http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea/reservations
 
 ### Put hotel
 
-PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+// @no-cookie-jar
+PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
 Content-Type: application/json
 
 {
@@ -72,36 +93,42 @@ Content-Type: application/json
 
 ### Update hotel
 
-PATCH http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+PATCH http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea
 Content-Type: application/json
 
 {
-"name": "Radisson",
-"rooms": 2
+  "name": "Radisson",
+  "rooms": 2
 }
 
 ### Delete hotel
 
-DELETE http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee
+// @no-cookie-jar
+DELETE http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+#Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
 
 ### Get reservations
-
+// @no-cookie-jar
 GET http://localhost:9080/hotels/api/reservations
+#Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+Authorization: Basic a2V2aW5AZXhhbXBsZS5jb206YWRtaW5hZG1pbg==
 
 ### Get non reservation
 
 GET http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
 
 ### Put reservation
-
-PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faee/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
+// @no-cookie-jar
+PUT http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00e
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+#Authorization: Basic a2V2aW5AZXhhbXBsZS5jb206YWRtaW5hZG1pbg==
 Content-Type: application/json
 
 {
   "startTime": "2024-05-02",
   "endTime": null,
-  "status": "RESERVED",
-  "userId": "81e1c2a9-7f57-439b-b53d-6db88b071e4e"
+  "status": "RESERVED"
 }
 
 ### Update reservation
@@ -115,6 +142,7 @@ Content-Type: application/json
 }
 
 ### Delete reservation
-
-DELETE http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00d
-
+// @no-cookie-jar
+DELETE http://localhost:9080/hotels/api/reservations/663313ff-a5b7-463d-88bf-fe64c7a7f00e
+Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+#Authorization: Basic a2V2aW5AZXhhbXBsZS5jb206YWRtaW5hZG1pbg==

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.reservation.view;
 
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import pl.edu.pg.eti.kask.component.ModelFunctionFactory;
+import pl.edu.pg.eti.kask.hotel.service.api.HotelService;
 import pl.edu.pg.eti.kask.reservation.model.ReservationEditModel;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;
 import pl.edu.pg.eti.kask.reservation.service.api.ReservationService;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @Named
 public class ReservationEdit implements Serializable {
 
-    private final ReservationService reservationService;
+    private ReservationService reservationService;
     private final ModelFunctionFactory factory;
 
     /**
@@ -39,9 +41,13 @@ public class ReservationEdit implements Serializable {
     private final List<Reservation.ReservationStatus> statuses = List.of(Reservation.ReservationStatus.values());
 
     @Inject
-    public ReservationEdit(ReservationService reservationService, ModelFunctionFactory factory) {
-        this.reservationService = reservationService;
+    public ReservationEdit(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     public void init() throws IOException {

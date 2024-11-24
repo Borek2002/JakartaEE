@@ -28,10 +28,16 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     @ToString.Exclude
+    private String password;
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private String photo;
+    @CollectionTable(name = "users__roles", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
 }

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.hotel.view;
 
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -23,8 +24,8 @@ import java.util.UUID;
 @Named
 public class HotelView implements Serializable {
 
-    private final HotelService service;
-    private final ReservationService reservationService;
+    private HotelService service;
+    private ReservationService reservationService;
     private final ModelFunctionFactory factory;
 
     @Getter
@@ -35,10 +36,18 @@ public class HotelView implements Serializable {
     private HotelModel hotel;
 
     @Inject
-    public HotelView(HotelService service, ReservationService reservationService, ModelFunctionFactory factory) {
-        this.service = service;
-        this.reservationService = reservationService;
+    public HotelView(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setHotelService(HotelService hotelService) {
+        this.service = hotelService;
+    }
+
+    @EJB
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     public void init() throws IOException {

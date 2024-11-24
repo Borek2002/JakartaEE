@@ -1,7 +1,9 @@
 package pl.edu.pg.eti.kask.user.repository.persistence;
 
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.user.repository.api.UserRepository;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
+@Dependent
 public class UserPersistenceRepository implements UserRepository {
 
     private EntityManager em;
@@ -45,5 +47,16 @@ public class UserPersistenceRepository implements UserRepository {
     @Override
     public void update(User entity) {
         em.merge(entity);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        try {
+            return Optional.of(em.createQuery("select u from User u where u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
     }
 }
