@@ -106,7 +106,7 @@ Content-Type: application/json
 // @no-cookie-jar
 DELETE http://localhost:9080/hotels/api/hotels/42d32cd8-08c7-46f4-ad80-034c1c83faea
 Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
-#Authorization: Basic YWRtaW5Ac2ltcGxlcnBnLmV4YW1wbGUuY29tOmFkbWluYWRtaW4=
+
 
 ### Get reservations
 // @no-cookie-jar

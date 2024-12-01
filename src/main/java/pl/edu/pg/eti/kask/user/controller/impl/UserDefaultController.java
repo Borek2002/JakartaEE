@@ -104,23 +104,23 @@ public class UserDefaultController implements UserController {
         this.service.createAvatar(user, is);
     }
 
-    @Override
-    public void updateAvatar(UUID uuid, InputStream is) {
-        User user = this.service.getUser(uuid)
-                .orElseThrow(NotFoundException::new);
-        if (Objects.isNull(user.getPhoto())){
-            throw new NotFoundException("Użytkownik nie posiada zdjęcia");
-        }
-        this.service.updateAvatar(user, is);
-    }
-
-    @Override
-    public void removeAvatar(UUID uuid) {
-        User user = this.service.getUser(uuid)
-                .orElseThrow(NotFoundException::new);
-        if (Objects.isNull(user.getPhoto())) {
-            throw new NotFoundException("Brak zdjecia");
-        }
-        this.service.removeAvatar(user);
-    }
+//    @Override
+//    public void updateAvatar(UUID uuid, InputStream is) {
+//        User user = this.service.getUser(uuid)
+//                .orElseThrow(NotFoundException::new);
+//        if (Objects.isNull(user.getPhoto())){
+//            throw new NotFoundException("Użytkownik nie posiada zdjęcia");
+//        }
+//        this.service.updateAvatar(user, is);
+//    }
+//
+//    @Override
+//    public void removeAvatar(UUID uuid) {
+//        User user = this.service.getUser(uuid)
+//                .orElseThrow(NotFoundException::new);
+//        if (Objects.isNull(user.getPhoto())) {
+//            throw new NotFoundException("Brak zdjecia");
+//        }
+//        this.service.removeAvatar(user);
+//    }
 }

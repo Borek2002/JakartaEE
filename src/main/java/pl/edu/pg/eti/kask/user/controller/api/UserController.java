@@ -37,13 +37,13 @@ public interface UserController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     void createAvatar(@PathParam("id") UUID uuid, @SuppressWarnings("RestParamTypeInspection")@FormParam("is") InputStream is);
 
-    @PATCH
-    @Path("/hotels/{id}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    void updateAvatar(@PathParam("id") UUID uuid,  @SuppressWarnings("RestParamTypeInspection")@FormParam("is") InputStream is);
-
-    @DELETE
-    @Path("/hotels/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    void removeAvatar(@PathParam("id") UUID uuid);
+//    @PATCH
+//    @Path("/hotels/{id}")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    void updateAvatar(@PathParam("id") UUID uuid,  @SuppressWarnings("RestParamTypeInspection")@FormParam("is") InputStream is);
+//
+//    @DELETE
+//    @Path("/hotels/{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    void removeAvatar(@PathParam("id") UUID uuid);
 }
