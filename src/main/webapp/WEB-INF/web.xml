@@ -28,10 +28,21 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>character</web-resource-name>
-            <url-pattern>/character/*</url-pattern>
+            <web-resource-name>reservations</web-resource-name>
+            <url-pattern>/reservations/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>hotel</web-resource-name>
+            <url-pattern>/hotel/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>

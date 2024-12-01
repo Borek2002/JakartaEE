@@ -3,10 +3,12 @@ package pl.edu.pg.eti.kask.hotel.repository.persistence;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -45,11 +45,11 @@ public class ReservationView implements Serializable {
     }
 
     public void init() throws IOException {
-        Optional<Reservation> reservation = service.getReservation(this.id);
+        Optional<Reservation> reservation = service.findForCallerPrincipal(this.id);
         if(reservation.isPresent()){
             this.reservation = factory.reservationToModel().apply(reservation.get());
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Hotel not found");
+            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Reservation not found");
         }
     }
 }

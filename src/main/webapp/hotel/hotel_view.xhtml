@@ -18,7 +18,7 @@
                     <div class="col-4">
                         <div class="row mb-2">
                             <div class="col-6">
-                                Rooms
+                                #{msg.rooms}
                             </div>
                             <div class="col-6">
                                 <h:outputText value="#{hotelView.hotel.rooms}"/>
@@ -27,7 +27,7 @@
 
                         <div class="row mb-2">
                             <div class="col-6">
-                                City
+                                #{msg.city}
                             </div>
                             <div class="col-6">
                                 <h:outputText value="#{hotelView.hotel.city}"/>
@@ -43,23 +43,23 @@
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">View</f:facet>
-                        <h:link outcome="/reservation/reservation_view.xhtml" value="View">
+                        <f:facet name="header">#{msg.view}</f:facet>
+                        <h:link outcome="/reservation/reservation_view.xhtml" value="#{msg.view}">
                             <f:param name="id" value="#{reservation.id}"/>
                         </h:link>
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Edit</f:facet>
-                        <h:link outcome="/reservation/reservation_edit.xhtml" value="View">
+                        <f:facet name="header">#{msg.edit}</f:facet>
+                        <h:link outcome="/reservation/reservation_edit.xhtml" value="#{msg.edit}">
                             <f:param name="id" value="#{reservation.id}"/>
                         </h:link>
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Delete</f:facet>
+                        <f:facet name="header">#{msg.delete}</f:facet>
                         <h:form>
-                            <h:commandButton styleClass="btn" value="Delete"
+                            <h:commandButton styleClass="btn" value="#{msg.delete}"
                                              action="#{hotelView.delete(reservation)}"/>
                         </h:form>
                     </h:column>

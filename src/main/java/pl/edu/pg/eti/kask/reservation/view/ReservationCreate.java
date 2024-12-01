@@ -67,7 +67,7 @@ public class ReservationCreate implements Serializable {
 
     public String saveActionn() {
         System.out.println(reservation.toString());
-        this.reservationService.create(modelFunctionFactory.modelToReservation().apply(reservation));
+        this.reservationService.createForCallerPrincipal(modelFunctionFactory.modelToReservation().apply(reservation));
         conversation.end();
         return "/hotel/hotel_list.xhtml?faces-redirect=true";
     }

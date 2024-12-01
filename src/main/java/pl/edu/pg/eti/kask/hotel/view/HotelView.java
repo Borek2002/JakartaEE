@@ -53,6 +53,7 @@ public class HotelView implements Serializable {
     public void init() throws IOException {
         Optional<Hotel> hotel = service.getHotel(id);
         if (hotel.isPresent()) {
+            hotel.get().setReservations(reservationService.getAllReservations());
             this.hotel = factory.hotelToModel().apply(hotel.get());
         } else {
             FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Hotel not found");

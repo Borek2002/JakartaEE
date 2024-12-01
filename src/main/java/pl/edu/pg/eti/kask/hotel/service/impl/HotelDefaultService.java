@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.hotel.service.impl;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -13,6 +14,8 @@ import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.hotel.service.api.HotelService;
 import pl.edu.pg.eti.kask.reservation.repository.api.ReservationRepository;
+import pl.edu.pg.eti.kask.user.repository.api.UserRepository;
+import pl.edu.pg.eti.kask.user.repository.entity.User;
 import pl.edu.pg.eti.kask.user.repository.entity.UserRoles;
 
 import java.util.List;
