@@ -35,8 +35,9 @@ public class HotelsList {
         return hotels;
     }
 
-    public String delete(HotelsModel.Hotel hotel) {
+    public void delete(HotelsModel.Hotel hotel) {
         service.delete(this.service.getHotel(hotel.getId()).get());
-        return "hotel_list?faces-redirect=true";
+       // return "hotel_list?faces-redirect=true";
+        hotels = null;
     }
 }

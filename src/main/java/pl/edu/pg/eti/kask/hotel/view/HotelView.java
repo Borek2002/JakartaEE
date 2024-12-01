@@ -60,9 +60,13 @@ public class HotelView implements Serializable {
         }
     }
 
-    public String delete(HotelModel.Reservation reservation) {
+    public void delete(HotelModel.Reservation reservation) {
         this.reservationService.delete(reservationService.getReservation(reservation.getId()).get());
-        return "hotel_view?id="+ this.id +"&faces-redirect=true";
+        //return "hotel_view?id="+ this.id +"&faces-redirect=true";
+        try {
+            init();
+        } catch (Exception e) {
+        }
     }
 
 }

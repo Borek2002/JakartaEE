@@ -102,6 +102,13 @@ public class InitializedData {
                     .name("WWAMelanz")
                     .build();
             hotelService.create(hotel);
+            Hotel hotel1 = Hotel.builder()
+                    .id(UUID.fromString("ff327e8a-77c0-4f9b-90a2-89e16895d1e8"))
+                    .city("Kato")
+                    .rooms(4)
+                    .name("Hello")
+                    .build();
+            hotelService.create(hotel1);
 
         }
     }
