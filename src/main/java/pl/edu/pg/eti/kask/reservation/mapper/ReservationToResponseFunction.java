@@ -24,6 +24,7 @@ public class ReservationToResponseFunction implements Function<Reservation, GetR
                 .startTime(reservation.getStartTime())
                 .endTime(reservation.getEndTime())
                 .status(reservation.getStatus())
+                .version(reservation.getVersion())
                 .build();
     }
 }

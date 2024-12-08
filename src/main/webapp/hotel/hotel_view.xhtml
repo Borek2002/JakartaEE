@@ -43,6 +43,25 @@
                     </h:column>
 
                     <h:column>
+                        <f:facet name="header">#{msg.version}</f:facet>
+                        <h:outputText value="#{reservation.version}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">#{msg.created}</f:facet>
+                        <h:outputText value="#{reservation.creationDateTime}">
+                            <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">#{msg.updated}</f:facet>
+                        <h:outputText value="#{reservation.updateDateTime}">
+                            <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
                         <f:facet name="header">#{msg.view}</f:facet>
                         <h:link outcome="/reservation/reservation_view.xhtml" value="#{msg.view}">
                             <f:param name="id" value="#{reservation.id}"/>

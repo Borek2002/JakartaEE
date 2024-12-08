@@ -5,6 +5,10 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.reservation.repository.api.ReservationRepository;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;
@@ -31,7 +35,13 @@ public class ReservationPersistenceRepository implements ReservationRepository {
 
     @Override
     public List<Reservation> findAll() {
-        return em.createQuery("select c from Reservation c", Reservation.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Reservation> cq = cb.createQuery(Reservation.class);
+        Root<Reservation> root = cq.from(Reservation.class);
+
+        cq.select(root);
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Override
@@ -49,16 +59,25 @@ public class ReservationPersistenceRepository implements ReservationRepository {
 
     @Override
     public void update(Reservation entity) {
+        if (!em.isJoinedToTransaction()) {
+            em.joinTransaction();
+        }
         em.merge(entity);
     }
 
     @Override
     public Optional<Reservation> findByIdAndUser(UUID id, User user) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Reservation> cq = cb.createQuery(Reservation.class);
+        Root<Reservation> root = cq.from(Reservation.class);
+        Predicate idPredicate = cb.equal(root.get("id"), id);
+        Predicate userPredicate = cb.equal(root.get("user"), user);
+
+        cq.where(cb.and(idPredicate, userPredicate));
+
         try {
-            return Optional.of(em.createQuery("select c from Reservation c where c.id = :id and c.user = :user", Reservation.class)
-                    .setParameter("user", user)
-                    .setParameter("id", id)
-                    .getSingleResult());
+            Reservation result = em.createQuery(cq).getSingleResult();
+            return Optional.of(result);
         } catch (NoResultException ex) {
             return Optional.empty();
         }
@@ -66,8 +85,14 @@ public class ReservationPersistenceRepository implements ReservationRepository {
 
     @Override
     public List<Reservation> findAllByUser(User user) {
-        return em.createQuery("select c from Reservation c where c.user = :user", Reservation.class)
-                .setParameter("user", user)
-                .getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Reservation> cq = cb.createQuery(Reservation.class);
+        Root<Reservation> root = cq.from(Reservation.class);
+
+        Predicate userPredicate = cb.equal(root.get("user"), user);
+
+        cq.where(userPredicate);
+
+        return em.createQuery(cq).getResultList();
     }
 }

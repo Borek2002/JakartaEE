@@ -28,5 +28,6 @@ public class GetReservationsResponse {
     }
 
     private List<Reservation> reservations;
+    private Long version;
 
 }

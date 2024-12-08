@@ -7,6 +7,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.user.repository.api.UserRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import pl.edu.pg.eti.kask.user.repository.entity.User;
 
 import java.util.List;
@@ -30,7 +34,14 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return em.createQuery("select c from User c", User.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+
+        cq.select(root);
+
+        return em.createQuery(cq).getResultList();
+
     }
 
     @Override
@@ -51,10 +62,17 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+
+        Predicate emailPredicate = cb.equal(root.get("email"), email);
+
+        cq.where(emailPredicate);
+
         try {
-            return Optional.of(em.createQuery("select u from User u where u.email = :email", User.class)
-                    .setParameter("email", email)
-                    .getSingleResult());
+            User result = em.createQuery(cq).getSingleResult();
+            return Optional.of(result);
         } catch (NoResultException ex) {
             return Optional.empty();
         }

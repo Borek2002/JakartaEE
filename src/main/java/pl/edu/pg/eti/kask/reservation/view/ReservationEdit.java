@@ -1,11 +1,14 @@
 package pl.edu.pg.eti.kask.reservation.view;
 
 import jakarta.ejb.EJB;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
 import lombok.Getter;
 import lombok.Setter;
 import pl.edu.pg.eti.kask.component.ModelFunctionFactory;
@@ -26,6 +29,7 @@ public class ReservationEdit implements Serializable {
 
     private ReservationService reservationService;
     private final ModelFunctionFactory factory;
+    private final FacesContext facesContext;
 
     /**
      * Character id.
@@ -41,8 +45,9 @@ public class ReservationEdit implements Serializable {
     private final List<Reservation.ReservationStatus> statuses = List.of(Reservation.ReservationStatus.values());
 
     @Inject
-    public ReservationEdit(ModelFunctionFactory factory) {
+    public ReservationEdit(ModelFunctionFactory factory, FacesContext facesContext) {
         this.factory = factory;
+        this.facesContext = facesContext;
     }
 
     @EJB
@@ -55,14 +60,22 @@ public class ReservationEdit implements Serializable {
         if (reservation.isPresent()) {
             this.reservation = factory.reservationToEditModel().apply(reservation.get());
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Character not found");
+            facesContext.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Reservation not found");
         }
     }
 
-    public String saveAction() {
-        reservationService.update(factory.updateReservation().apply(reservationService.getReservation(id).orElseThrow(), reservation));
-        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        return viewId + "?faces-redirect=true&includeViewParams=true";
+    public String saveAction() throws IOException {
+        try {
+            reservationService.update(factory.updateReservation().apply(reservationService.getReservation(id).orElseThrow(), reservation));
+            String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+            return viewId + "?faces-redirect=true&includeViewParams=true";
+        } catch (TransactionalException ex) {
+            if (ex.getCause() instanceof OptimisticLockException) {
+                init();
+                facesContext.addMessage(null, new FacesMessage("Version collision."));
+            }
+            return null ;
+        }
     }
 
 }

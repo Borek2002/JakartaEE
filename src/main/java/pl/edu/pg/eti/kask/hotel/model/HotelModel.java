@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.hotel.model;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,9 @@ public class HotelModel {
     @EqualsAndHashCode
     public static class Reservation {
         private UUID id;
+        private Long version;
+        private LocalDateTime creationDateTime;
+        private LocalDateTime updateDateTime;
     }
 
     private UUID id;

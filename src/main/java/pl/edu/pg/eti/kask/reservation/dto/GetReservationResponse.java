@@ -46,4 +46,5 @@ public class GetReservationResponse {
     private Reservation.ReservationStatus status;
     private Hotel hotel;
     private User user;
+    private Long version;
 }

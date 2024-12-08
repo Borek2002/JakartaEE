@@ -16,4 +16,5 @@ public class PatchReservationRequest {
 
     private LocalDate endTime;
     private Reservation.ReservationStatus status;
+    private Long version;
 }

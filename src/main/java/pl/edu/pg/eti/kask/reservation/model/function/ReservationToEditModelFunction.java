@@ -12,6 +12,8 @@ public class ReservationToEditModelFunction implements Function<Reservation, Res
         return ReservationEditModel.builder()
                 .endTime(reservation.getEndTime())
                 .status(reservation.getStatus())
+                .creationDateTime(reservation.getCreationDateTime())
+                .version(reservation.getVersion())
                 .build();
     }
 }

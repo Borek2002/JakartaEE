@@ -5,6 +5,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import pl.edu.pg.eti.kask.hotel.repository.api.HotelRepository;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;
@@ -31,7 +34,13 @@ public class HotelPersistenceRepository implements HotelRepository {
 
     @Override
     public List<Hotel> findAll() {
-        return em.createQuery("select c from Hotel c", Hotel.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Hotel> cq = cb.createQuery(Hotel.class);
+        Root<Hotel> root = cq.from(Hotel.class);
+
+        cq.select(root);
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Override

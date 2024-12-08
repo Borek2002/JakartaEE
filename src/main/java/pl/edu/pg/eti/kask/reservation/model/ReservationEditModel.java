@@ -4,6 +4,7 @@ import lombok.*;
 import pl.edu.pg.eti.kask.reservation.repository.entity.Reservation;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,4 +18,7 @@ public class ReservationEditModel {
 
     private LocalDate endTime;
     private Reservation.ReservationStatus status;
+    private Long version;
+    private LocalDateTime creationDateTime;
+    private LocalDateTime updateDateTime;
 }

@@ -21,4 +21,5 @@ public class PutReservationRequest {
     private Reservation.ReservationStatus status;
     private UUID hotelId;
     private UUID userId;
+    private Long version;
 }

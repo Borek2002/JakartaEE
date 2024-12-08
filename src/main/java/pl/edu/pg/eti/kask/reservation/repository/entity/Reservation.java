@@ -3,6 +3,7 @@ package pl.edu.pg.eti.kask.reservation.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import pl.edu.pg.eti.kask.entity.VersionAndCreationDateAuditable;
 import pl.edu.pg.eti.kask.hotel.repository.entity.Hotel;
 import pl.edu.pg.eti.kask.user.repository.entity.User;
 
@@ -16,10 +17,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "reservations")
-public class Reservation implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class Reservation extends VersionAndCreationDateAuditable implements Serializable {
 
     public enum ReservationStatus{
         AVAILABLE, RESERVED, PAID, CANCELLED;

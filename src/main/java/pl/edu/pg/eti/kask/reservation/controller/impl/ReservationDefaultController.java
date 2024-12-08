@@ -6,6 +6,7 @@ import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.EJBException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
@@ -88,6 +89,10 @@ public class ReservationDefaultController implements ReservationController {
                 throw new BadRequestException(ex);
             }
             throw ex;
+        } catch (TransactionalException ex) {
+            if (ex.getCause() instanceof OptimisticLockException) {
+                throw new BadRequestException(ex.getCause());
+            }
         }
     }
 

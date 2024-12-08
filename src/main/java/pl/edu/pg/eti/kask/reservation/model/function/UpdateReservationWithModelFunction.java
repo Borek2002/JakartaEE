@@ -16,6 +16,8 @@ public class UpdateReservationWithModelFunction implements BiFunction<Reservatio
                 .status(reservationEditModel.getStatus())
                 .startTime(reservation.getStartTime())
                 .user(reservation.getUser())
+                .creationDateTime(reservation.getCreationDateTime())
+                .version(reservation.getVersion())
                 .build();
     }
 }

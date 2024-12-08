@@ -18,6 +18,8 @@ public class UpdateToReservationFunction implements BiFunction<Reservation, Patc
                 .endTime(patchReservationRequest.getEndTime())
                 .status(patchReservationRequest.getStatus())
                 .startTime(reservation.getStartTime())
+                .version(reservation.getVersion())
+                .creationDateTime(reservation.getCreationDateTime())
                 .build();
     }
 }
